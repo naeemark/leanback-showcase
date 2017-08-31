@@ -15,8 +15,10 @@
 package android.support.v17.leanback.supportleanbackshowcase.app.cards;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.supportleanbackshowcase.R;
 import android.support.v17.leanback.supportleanbackshowcase.app.details.DetailViewExampleActivity;
@@ -54,25 +56,19 @@ public class CardExampleFragment extends BrowseFragment {
 
     private ArrayObjectAdapter mRowsAdapter;
 
-    @Override public void onActivityCreated(Bundle savedInstanceState) {
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setupUi();
         setupRowAdapter();
     }
 
     private void setupUi() {
-        setHeadersState(HEADERS_ENABLED);
-        setHeadersTransitionOnBackEnabled(true);
-        setTitle(getString(R.string.card_examples_title));
-        setOnSearchClickedListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), getString(R.string.implement_search),
-                        Toast.LENGTH_LONG).show();
-            }
-        });
+        setupHeaders(false);
+
         setOnItemViewClickedListener(new OnItemViewClickedListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onItemClicked(Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder1, Row row) {
                 if (!(item instanceof Card)) return;
@@ -94,6 +90,24 @@ public class CardExampleFragment extends BrowseFragment {
         prepareEntranceTransition();
     }
 
+    private void setupHeaders(boolean show) {
+        if (!show) {
+            setHeadersState(HEADERS_DISABLED);
+            return;
+        }
+        setHeadersState(HEADERS_ENABLED);
+        setHeadersTransitionOnBackEnabled(true);
+        setTitle(getString(R.string.card_examples_title));
+
+        setOnSearchClickedListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), getString(R.string.implement_search),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     private void setupRowAdapter() {
         mRowsAdapter = new ArrayObjectAdapter(new ShadowRowPresenterSelector());
         setAdapter(mRowsAdapter);
@@ -111,6 +125,7 @@ public class CardExampleFragment extends BrowseFragment {
                 .inputStreamToString(getResources().openRawResource(R.raw.cards_example));
         CardRow[] rows = new Gson().fromJson(json, CardRow[].class);
         for (CardRow row : rows) {
+            row.useShadow();
             mRowsAdapter.add(createCardRow(row));
         }
     }
@@ -130,6 +145,7 @@ public class CardExampleFragment extends BrowseFragment {
                     listRowAdapter.add(card);
                 }
                 return new CardListRow(new HeaderItem(cardRow.getTitle()), listRowAdapter, cardRow);
+//                return new CardListRow(null, listRowAdapter, cardRow);
         }
     }
 
