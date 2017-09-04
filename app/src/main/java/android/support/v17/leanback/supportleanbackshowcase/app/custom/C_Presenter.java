@@ -4,8 +4,6 @@ package android.support.v17.leanback.supportleanbackshowcase.app.custom;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.v17.leanback.system.Settings;
-import android.support.v17.leanback.transition.TransitionHelper;
 import android.support.v17.leanback.widget.BaseGridView;
 import android.support.v17.leanback.widget.FocusHighlightHelper;
 import android.support.v17.leanback.widget.HorizontalGridView;
@@ -13,7 +11,6 @@ import android.support.v17.leanback.widget.HorizontalHoverCardSwitcher;
 import android.support.v17.leanback.widget.ItemBridgeAdapter;
 import android.support.v17.leanback.widget.ItemBridgeAdapterShadowOverlayWrapper;
 import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
 import android.support.v17.leanback.widget.ListRowView;
 import android.support.v17.leanback.widget.OnChildSelectedListener;
 import android.support.v17.leanback.widget.Presenter;
@@ -161,26 +158,26 @@ public class C_Presenter extends RowPresenter {
     }
 
     void selectChildView(C_Presenter.ViewHolder rowViewHolder, View view, boolean fireEvent) {
-//        if(view != null) {
-//            if(rowViewHolder.mSelected) {
-//                android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder ibh = (android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder)rowViewHolder.mGridView.getChildViewHolder(view);
-//                if(this.mHoverCardPresenterSelector != null) {
-//                    rowViewHolder.mHoverCardViewSwitcher.select(rowViewHolder.mGridView, view, ibh.mItem);
-//                }
-//
-//                if(fireEvent && rowViewHolder.getOnItemViewSelectedListener() != null) {
-//                    rowViewHolder.getOnItemViewSelectedListener().onItemSelected(ibh.mHolder, ibh.mItem, rowViewHolder, rowViewHolder.mRow);
-//                }
-//            }
-//        } else {
-//            if(this.mHoverCardPresenterSelector != null) {
-//                rowViewHolder.mHoverCardViewSwitcher.unselect();
-//            }
-//
-//            if(fireEvent && rowViewHolder.getOnItemViewSelectedListener() != null) {
-//                rowViewHolder.getOnItemViewSelectedListener().onItemSelected((android.support.v17.leanback.widget.Presenter.ViewHolder)null, (Object)null, rowViewHolder, rowViewHolder.mRow);
-//            }
-//        }
+        if(view != null) {
+            if(rowViewHolder.isSelected()) {
+                android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder ibh = (android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder)rowViewHolder.mGridView.getChildViewHolder(view);
+                if(this.mHoverCardPresenterSelector != null) {
+                    rowViewHolder.mHoverCardViewSwitcher.select(rowViewHolder.mGridView, view, ibh.getItem());
+                }
+
+                if(fireEvent && rowViewHolder.getOnItemViewSelectedListener() != null) {
+                    rowViewHolder.getOnItemViewSelectedListener().onItemSelected(ibh.getViewHolder(), ibh.getItem(), rowViewHolder, rowViewHolder.getRow());
+                }
+            }
+        } else {
+            if(this.mHoverCardPresenterSelector != null) {
+                rowViewHolder.mHoverCardViewSwitcher.unselect();
+            }
+
+            if(fireEvent && rowViewHolder.getOnItemViewSelectedListener() != null) {
+                rowViewHolder.getOnItemViewSelectedListener().onItemSelected((android.support.v17.leanback.widget.Presenter.ViewHolder)null, (Object)null, rowViewHolder, rowViewHolder.getRow());
+            }
+        }
 
     }
 
@@ -234,7 +231,7 @@ public class C_Presenter extends RowPresenter {
             super.dispatchItemSelectedListener(holder, selected);
         } else {
             if(selected && holder.getOnItemViewSelectedListener() != null) {
-//                holder.getOnItemViewSelectedListener().onItemSelected(itemViewHolder.getViewHolder(), itemViewHolder.mItem, vh, vh.getRow());
+                holder.getOnItemViewSelectedListener().onItemSelected(itemViewHolder.getViewHolder(), itemViewHolder.getItem(), vh, vh.getRow());
             }
 
         }
@@ -248,16 +245,16 @@ public class C_Presenter extends RowPresenter {
     }
 
     private void updateFooterViewSwitcher(C_Presenter.ViewHolder vh) {
-//        if(vh.mExpanded && vh.mSelected) {
-//            if(this.mHoverCardPresenterSelector != null) {
-//                vh.mHoverCardViewSwitcher.init((ViewGroup)vh.view, this.mHoverCardPresenterSelector);
-//            }
-//
-//            android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder ibh = (android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder)vh.mGridView.findViewHolderForPosition(vh.mGridView.getSelectedPosition());
-//            this.selectChildView(vh, ibh == null?null:ibh.itemView, false);
-//        } else if(this.mHoverCardPresenterSelector != null) {
-//            vh.mHoverCardViewSwitcher.unselect();
-//        }
+        if(vh.isExpanded() && vh.isSelected()) {
+            if(this.mHoverCardPresenterSelector != null) {
+                vh.mHoverCardViewSwitcher.init((ViewGroup)vh.view, this.mHoverCardPresenterSelector);
+            }
+
+            android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder ibh = (android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder)vh.mGridView.findViewHolderForPosition(vh.mGridView.getSelectedPosition());
+            this.selectChildView(vh, ibh == null?null:ibh.itemView, false);
+        } else if(this.mHoverCardPresenterSelector != null) {
+            vh.mHoverCardViewSwitcher.unselect();
+        }
 
     }
 
@@ -398,22 +395,22 @@ public class C_Presenter extends RowPresenter {
 
         public void onBind(final android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder viewHolder) {
             if(this.mRowViewHolder.getOnItemViewClickedListener() != null) {
-//                viewHolder.mHolder.view.setOnClickListener(new View.OnClickListener() {
-//                    public void onClick(View v) {
-//                        android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder ibh = (android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder)C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.mGridView.getChildViewHolder(viewHolder.itemView);
-//                        if(C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.getOnItemViewClickedListener() != null) {
-//                            C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.getOnItemViewClickedListener().onItemClicked(viewHolder.mHolder, ibh.mItem, C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder, (ListRow)C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.mRow);
-//                        }
-//
-//                    }
-//                });
+                viewHolder.getViewHolder().view.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder ibh = (android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder)C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.mGridView.getChildViewHolder(viewHolder.itemView);
+                        if(C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.getOnItemViewClickedListener() != null) {
+                            C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.getOnItemViewClickedListener().onItemClicked(viewHolder.getViewHolder(), ibh.getItem(), C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder, (ListRow)C_Presenter.ListRowPresenterItemBridgeAdapter.this.mRowViewHolder.getRow());
+                        }
+
+                    }
+                });
             }
 
         }
 
         public void onUnbind(android.support.v17.leanback.widget.ItemBridgeAdapter.ViewHolder viewHolder) {
             if(this.mRowViewHolder.getOnItemViewClickedListener() != null) {
-//                viewHolder.mHolder.view.setOnClickListener((View.OnClickListener)null);
+                viewHolder.getViewHolder().view.setOnClickListener((View.OnClickListener)null);
             }
 
         }

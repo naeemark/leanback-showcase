@@ -51,5 +51,13 @@
     <dimen name="card_height">96dp</dimen>
 
     <dimen name="lb_browse_rows_margin_top">50dp</dimen>
+    <dimen name="lb_browse_section_header_text_size">56sp</dimen>
+
+    <dimen name="lb_browse_header_text_size">20sp</dimen>
+    <color name="lb_browse_header_color">@color/player_background_color</color>
+    <color name="lb_browse_header_description_color">@color/lb_browse_header_color</color>
+    <color name="lb_basic_card_title_text_color">@color/white</color>
+
+
 
 </resources>

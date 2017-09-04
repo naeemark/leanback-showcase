@@ -34,6 +34,8 @@ dependencies {
     compile "com.android.support:palette-v7:+"
     compile 'com.google.android.exoplayer:exoplayer:r2.2.0'
 
-    compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     compile 'com.android.support:support-tv-provider:+'
+
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0'
 }

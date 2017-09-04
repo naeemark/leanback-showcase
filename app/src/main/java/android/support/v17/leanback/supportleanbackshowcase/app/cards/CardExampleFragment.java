@@ -14,15 +14,13 @@
 
 package android.support.v17.leanback.supportleanbackshowcase.app.cards;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v17.leanback.app.BrowseFragment;
 import android.support.v17.leanback.supportleanbackshowcase.R;
-import android.support.v17.leanback.supportleanbackshowcase.app.details.DetailViewExampleActivity;
-import android.support.v17.leanback.supportleanbackshowcase.app.details.DetailViewExampleFragment;
 import android.support.v17.leanback.supportleanbackshowcase.app.details.ShadowRowPresenterSelector;
 import android.support.v17.leanback.supportleanbackshowcase.cards.presenters.CardPresenterSelector;
 import android.support.v17.leanback.supportleanbackshowcase.models.Card;
@@ -30,20 +28,16 @@ import android.support.v17.leanback.supportleanbackshowcase.models.CardRow;
 import android.support.v17.leanback.supportleanbackshowcase.utils.CardListRow;
 import android.support.v17.leanback.supportleanbackshowcase.utils.Utils;
 import android.support.v17.leanback.widget.ArrayObjectAdapter;
+import android.support.v17.leanback.widget.DividerRow;
 import android.support.v17.leanback.widget.HeaderItem;
 import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.DividerRow;
-import android.support.v17.leanback.widget.SectionRow;
-import android.support.v17.leanback.widget.ListRow;
 import android.support.v17.leanback.widget.OnItemViewClickedListener;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v17.leanback.widget.SearchOrbView;
-import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v17.leanback.widget.SectionRow;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -54,6 +48,7 @@ import com.google.gson.Gson;
  */
 public class CardExampleFragment extends BrowseFragment {
 
+    private Context mContext;
     private ArrayObjectAdapter mRowsAdapter;
 
     @Override
@@ -71,18 +66,24 @@ public class CardExampleFragment extends BrowseFragment {
             @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onItemClicked(Presenter.ViewHolder viewHolder, Object item, RowPresenter.ViewHolder viewHolder1, Row row) {
+
+
                 if (!(item instanceof Card)) return;
                 if (!(viewHolder.view instanceof ImageCardView)) return;
 
-                ImageView imageView = ((ImageCardView) viewHolder.view).getMainImageView();
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                        imageView, DetailViewExampleFragment.TRANSITION_NAME).toBundle();
-                Intent intent = new Intent(getActivity().getBaseContext(),
-                        DetailViewExampleActivity.class);
-                Card card = (Card) item;
-                int imageResId = card.getLocalImageResourceId(getContext());
-                intent.putExtra(DetailViewExampleFragment.EXTRA_CARD, imageResId);
-                startActivity(intent, bundle);
+
+                Toast.makeText(getActivity(), "Clicked: " + ((Card) item).getTitle(), Toast.LENGTH_SHORT).show();
+
+//
+//                ImageView imageView = ((ImageCardView) viewHolder.view).getMainImageView();
+//                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+//                        imageView, DetailViewExampleFragment.TRANSITION_NAME).toBundle();
+//                Intent intent = new Intent(getActivity().getBaseContext(),
+//                        DetailViewExampleActivity.class);
+//                Card card = (Card) item;
+//                int imageResId = card.getLocalImageResourceId(getContext());
+//                intent.putExtra(DetailViewExampleFragment.EXTRA_CARD, imageResId);
+//                startActivity(intent, bundle);
             }
 
         });
@@ -144,7 +145,12 @@ public class CardExampleFragment extends BrowseFragment {
                 for (Card card : cardRow.getCards()) {
                     listRowAdapter.add(card);
                 }
-                return new CardListRow(new HeaderItem(cardRow.getTitle()), listRowAdapter, cardRow);
+
+                HeaderItem hi = new HeaderItem(cardRow.getTitle());
+                hi.setDescription("This is sample description");
+                hi.setContentDescription("This is sample content-description");
+
+                return new CardListRow(hi, listRowAdapter, cardRow);
 //                return new CardListRow(null, listRowAdapter, cardRow);
         }
     }
