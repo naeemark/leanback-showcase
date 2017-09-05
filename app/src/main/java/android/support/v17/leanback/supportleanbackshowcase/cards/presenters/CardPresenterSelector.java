@@ -20,6 +20,7 @@ import android.support.v17.leanback.supportleanbackshowcase.R;
 import android.support.v17.leanback.supportleanbackshowcase.models.Card;
 import android.support.v17.leanback.widget.Presenter;
 import android.support.v17.leanback.widget.PresenterSelector;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -28,6 +29,7 @@ import java.util.HashMap;
  */
 public class CardPresenterSelector extends PresenterSelector {
 
+    private static final String TAG = CardPresenterSelector.class.getSimpleName();
     private final Context mContext;
     private final HashMap<Card.Type, Presenter> presenters = new HashMap<Card.Type, Presenter>();
 
@@ -41,6 +43,7 @@ public class CardPresenterSelector extends PresenterSelector {
                 String.format("The PresenterSelector only supports data items of type '%s'",
                         Card.class.getName()));
         Card card = (Card) item;
+        Log.i(TAG, "Card: "+ card.toString());
         Presenter presenter = presenters.get(card.getType());
         if (presenter == null) {
             switch (card.getType()) {
@@ -85,6 +88,7 @@ public class CardPresenterSelector extends PresenterSelector {
                     break;
                 default:
                     presenter = new ImageCardViewPresenter(mContext);
+                    Log.i(TAG, "ImageCardViewPresenter");
                     break;
             }
         }

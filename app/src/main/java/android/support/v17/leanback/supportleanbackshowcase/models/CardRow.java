@@ -53,4 +53,13 @@ public class CardRow {
         return mCards;
     }
 
+    @Override
+    public String toString() {
+        return "CardRow{" +
+                "mType=" + mType +
+                ", mShadow=" + mShadow +
+                ", mTitle='" + mTitle + '\'' +
+                ", mCards=" + mCards +
+                '}';
+    }
 }

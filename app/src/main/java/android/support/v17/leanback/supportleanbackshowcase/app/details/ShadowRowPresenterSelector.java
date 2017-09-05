@@ -15,7 +15,7 @@
 
 package android.support.v17.leanback.supportleanbackshowcase.app.details;
 
-import android.support.v17.leanback.supportleanbackshowcase.app.custom.C_Presenter;
+import android.support.v17.leanback.supportleanbackshowcase.app.custom.CustomRowPresenter;
 import android.support.v17.leanback.supportleanbackshowcase.models.CardRow;
 import android.support.v17.leanback.supportleanbackshowcase.utils.CardListRow;
 import android.support.v17.leanback.widget.ListRowPresenter;
@@ -28,15 +28,19 @@ import android.support.v17.leanback.widget.PresenterSelector;
  */
 public class ShadowRowPresenterSelector extends PresenterSelector {
 
-    private C_Presenter mShadowEnabledRowPresenter = new C_Presenter();
-    private C_Presenter mShadowDisabledRowPresenter = new C_Presenter();
+    private CustomRowPresenter mShadowEnabledRowPresenter = new CustomRowPresenter();
+    private CustomRowPresenter mShadowDisabledRowPresenter = new CustomRowPresenter();
 
     public ShadowRowPresenterSelector() {
         mShadowEnabledRowPresenter.setNumRows(1);
     }
 
-    @Override public Presenter getPresenter(Object item) {
-        if (!(item instanceof CardListRow)) return mShadowDisabledRowPresenter;
+    @Override
+    public Presenter getPresenter(Object item) {
+
+        if (!(item instanceof CardListRow)) {
+            return mShadowDisabledRowPresenter;
+        }
         CardListRow listRow = (CardListRow) item;
         CardRow row = listRow.getCardRow();
         if (row.useShadow()) return mShadowEnabledRowPresenter;
@@ -45,7 +49,7 @@ public class ShadowRowPresenterSelector extends PresenterSelector {
 
     @Override
     public Presenter[] getPresenters() {
-        return new Presenter [] {
+        return new Presenter[]{
                 mShadowDisabledRowPresenter,
                 mShadowEnabledRowPresenter
         };

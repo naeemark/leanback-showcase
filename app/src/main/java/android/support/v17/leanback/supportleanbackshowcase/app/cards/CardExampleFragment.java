@@ -37,6 +37,7 @@ import android.support.v17.leanback.widget.PresenterSelector;
 import android.support.v17.leanback.widget.Row;
 import android.support.v17.leanback.widget.RowPresenter;
 import android.support.v17.leanback.widget.SectionRow;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -132,6 +133,9 @@ public class CardExampleFragment extends BrowseFragment {
     }
 
     private Row createCardRow(final CardRow cardRow) {
+
+        Log.i("createCardRow: ", cardRow.toString());
+
         switch (cardRow.getType()) {
             case CardRow.TYPE_SECTION_HEADER:
                 return new SectionRow(new HeaderItem(cardRow.getTitle()));

@@ -184,4 +184,21 @@ public class Card {
 
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "mTitle='" + mTitle + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mExtraText='" + mExtraText + '\'' +
+                ", mImageUrl='" + mImageUrl + '\'' +
+                ", mFooterColor='" + mFooterColor + '\'' +
+                ", mSelectedColor='" + mSelectedColor + '\'' +
+                ", mLocalImageResource='" + mLocalImageResource + '\'' +
+                ", mFooterResource='" + mFooterResource + '\'' +
+                ", mType=" + mType +
+                ", mId=" + mId +
+                ", mWidth=" + mWidth +
+                ", mHeight=" + mHeight +
+                '}';
+    }
 }
